@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Andrews ToDoList</title>
+        <link rel="stylesheet" href="css/index_css.css" type="text/css">
+    </head>
+
+    <body>
+        <header>
+            <h1>todos</h1>
+            <input class="new-todo" placeholder="What needs to be done?" autofocus>
+        </header>
+
+        <section class="main">
+            <input id="toggle-all" class="toggle-all" type="checkbox">
+            <label for="toggle-all">all</label>
+            <ul class="list"></ul>
+        </section>
+
+        <div class="operations">
+            <output class="count">item left</output>
+            <div class="sort">
+                <button class="all">All</button>
+                <button class="active">Active</button>
+                <button class="compliet">Completed</button>
+            </div>
+            <button class="clearAll">Clear completed</button>
+        </div>
+
+        <script type="text/Javascript" src="js/Jquery.js"></script>
+        <script type="text/Javascript" src="js/index_js.js"></script>
+    </body>
+</html>

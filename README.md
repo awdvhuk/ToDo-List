@@ -1,0 +1,1 @@
+This is just a simple to-do list. You can add new task, edit it, remove, sort and what ever you want :)
