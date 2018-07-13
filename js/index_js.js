@@ -1,37 +1,29 @@
 $(document).ready(function(){
     var editID;
-    displayList();
 
     $('body').on('keydown', '.new-todo', function(){
-        if ( event.keyCode == 13 ) {
-            addTodo();
-        }
-    });
+                if ( event.keyCode == 13 ) {
+                    addNewTodo();
+                }
+            })
+            .on('dblclick', 'li', startEdit)
+            .on('keydown', 'li', function(){
+                if ( event.keyCode == 27 ) {
+                    endEdit();
+                }
+                if ( event.keyCode == 13 ) {
+                    applyEdit();
+                }
+            })
+            .on('blur', '.edit', endEdit)
+            .on('click', '.toggle', taskCompliet)
+            .on('click', '.toggle-all', pickAll)
+            .on('click', '.clearAll', clearAllCompliet)
+            .on('click', '.del', deliteTask)
+            .on('click', '.all, .active, .compliet', listSort);
+            
 
-    $('body').on('keydown', 'li', function(){
-        if ( event.keyCode == 27 ) {
-            editEnd();
-        }
-        if ( event.keyCode == 13 ) {
-            applyEdit();
-        }
-    });
-
-    $('body').on('click', '.toggle-all', pickAll);
-
-    $('body').on('blur', '.edit', editEnd);
-
-    $('body').on('click', '.clearAll', clear);
-
-    $('body').on('click', '.toggle', done);
-
-    $('body').on('click', '.del', del);
-
-    $('body').on('dblclick', 'li', startEdit);
-
-    $('body').on('click', '.all, .active, .compliet', listSort);
-
-    function addTodo() {
+    function addNewTodo() {
         $('.toggle-all').prop('checked', false);
         var val = {
             text: $('.new-todo').val(),
@@ -99,40 +91,13 @@ $(document).ready(function(){
         counter(arr);
     }
 
-    function counter(arr) {
-        var counter = 0;
-        var arr = get();
-        for ( let i = 0; i < arr.length; i++ ) {
-            if ( !arr[i].completed ) {
-                counter++;
-            }
-        }
-        switch (counter) {
-            case 1:
-            $('.count').val('1 item left');
-            break;
-
-            default:
-            var screen = counter + ' items left';
-            $('.count').val(screen);
-        }
-    }
-
     function toScreen(id){
         var arr = get();
-        var li = document.createElement('li');
-        txt = document.createTextNode(arr[id].text);
-        li.appendChild(txt);
-        li.className = id + '';
-        $('.list').append(li);
+        $('.list').append(`<li class="` + id + `">` + arr[id].text + `</li>`);
         $('li:last-child').append(`
-            <input class="toggle" type="checkbox">
+            <input class="toggle ` + id + `" type="checkbox">
             <label></label>
-            <button class="del">×</button>
-        `);
-        $('li:last-child button').addClass(id + '');
-        $('li:last-child .toggle').addClass(id + '');
-        
+            <button class="del ` + id + `">×</button>`);
         if ( arr[id].completed == true ) {
             li.className += ' completed';
             $('.toggle:last').prop('checked', true);
@@ -156,17 +121,17 @@ $(document).ready(function(){
         arr[editID].text = $('.edit').val();
         set(arr);
         $('.list').empty();
-        editEnd();
+        endEdit();
         displayList();
     }
 
-    function editEnd() {
+    function endEdit() {
         $('.editing').removeClass('editing');
         $('.edit').remove();
         $('.new-todo').focus();
     }
 
-    function del(){
+    function deliteTask(){
         var id = $(this).attr("class");
         id = id.split(' ').pop();
         if ( id == '0' ) { id = 0; }
@@ -177,7 +142,7 @@ $(document).ready(function(){
         refresh();
     }
 
-    function done(){
+    function taskCompliet(){
         var id = $(this).attr("class");
         id = id.split(' ').pop();
         if ( id == '0' ) { id = 0; }
@@ -195,7 +160,7 @@ $(document).ready(function(){
         refresh();
     }
 
-    function clear() {
+    function clearAllCompliet() {
         var arr = get();
         for ( let i = 0; i < arr.length; i++ ) {
             if ( arr[i].completed ) {
@@ -235,10 +200,23 @@ $(document).ready(function(){
         return count;
     }
 
-    function refresh() {
-        $('.list').empty();
-        displayList();
-        $('.new-todo').focus();
+    function counter(arr) {
+        var counter = 0;
+        var arr = get();
+        for ( let i = 0; i < arr.length; i++ ) {
+            if ( !arr[i].completed ) {
+                counter++;
+            }
+        }
+        switch (counter) {
+            case 1:
+            $('.count').val('1 item left');
+            break;
+
+            default:
+            var screen = counter + ' items left';
+            $('.count').val(screen);
+        }
     }
 
     function listSort() {
@@ -265,6 +243,12 @@ $(document).ready(function(){
         $('.' + localStorage.getItem('list-sort')).css('border-color', 'rgba(175, 47, 47, 0.2)', '!important');
     }
 
+    function refresh() {
+        $('.list').empty();
+        displayList();
+        $('.new-todo').focus();
+    }
+
     function set(val) {
         localStorage.setItem('Andrews-ToDo', JSON.stringify(val));
     }
@@ -272,4 +256,6 @@ $(document).ready(function(){
     function get() {
         return (JSON.parse(localStorage.getItem('Andrews-ToDo')) || []);
     }
+
+    displayList();
 });
