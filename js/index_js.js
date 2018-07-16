@@ -117,6 +117,10 @@ $(document).ready(function(){
     }
 
     function applyEdit() {
+        if ( $('.edit').val() == '' || $('.edit').val() == false ) {
+            deliteTask(editID);
+            return;
+        }
         var arr = get();
         arr[editID].text = $('.edit').val();
         set(arr);
@@ -131,9 +135,11 @@ $(document).ready(function(){
         $('.new-todo').focus();
     }
 
-    function deliteTask(){
-        var id = $(this).attr("class");
-        id = id.split(' ').pop();
+    function deliteTask(id){
+        if ( id != editID ) {
+            id = $(this).attr("class");
+            id = id.split(' ').pop();
+        }
         if ( id == '0' ) { id = 0; }
         var arr = get();
         arr.splice(+id, 1);
