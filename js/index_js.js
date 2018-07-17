@@ -99,7 +99,7 @@ $(document).ready(function(){
             <label></label>
             <button class="del ` + id + `">×</button>`);
         if ( arr[id].completed == true ) {
-            li.className += ' completed';
+            $('li:last-child').addClass('completed');
             $('.toggle:last').prop('checked', true);
         }
     }
